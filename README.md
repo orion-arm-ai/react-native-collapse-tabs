@@ -11,7 +11,7 @@
 ## Preview
 
 <p align="center">
-  <img src="https://assets.syft.ai/repository/collapse-tabs.gif" alt="collapse-tabs demo" width="320" />
+  <img src="https://raw.githubusercontent.com/orion-arm-ai/react-native-collapse-tabs/main/assets/collapse-tabs.gif" alt="collapse-tabs demo" width="320" />
 </p>
 
 ---
@@ -32,13 +32,13 @@
 
 ## Requirements
 
-| Peer dependency               | Version    |
-| ----------------------------- | ---------- |
-| `react`                       | `>=16.8.0` |
-| `react-native`                | `>=0.60.0` |
-| `react-native-gesture-handler`| `>=2.0.0`  |
-| `react-native-pager-view`     | `>=6.0.0`  |
-| `react-native-reanimated`     | `>=3.0.0`  |
+| Peer dependency                | Version    |
+| ------------------------------ | ---------- |
+| `react`                        | `>=16.8.0` |
+| `react-native`                 | `>=0.60.0` |
+| `react-native-gesture-handler` | `>=2.0.0`  |
+| `react-native-pager-view`      | `>=6.0.0`  |
+| `react-native-reanimated`      | `>=3.0.0`  |
 
 Make sure Reanimated is set up correctly (Babel plugin + `react-native-reanimated/plugin` at the **end** of your `babel.config.js` plugins array).
 
@@ -126,9 +126,18 @@ export default function Example() {
 }
 
 const styles = StyleSheet.create({
-  header: { flex: 1, backgroundColor: "#2D8CFF", justifyContent: "center", alignItems: "center" },
+  header: {
+    flex: 1,
+    backgroundColor: "#2D8CFF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   headerText: { color: "#fff", fontSize: 22, fontWeight: "600" },
-  row: { padding: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: "#eee" },
+  row: {
+    padding: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: "#eee",
+  },
 });
 ```
 
@@ -142,39 +151,39 @@ const styles = StyleSheet.create({
 
 The root container.
 
-| Prop                   | Type                                                       | Required | Description                                                                          |
-| ---------------------- | ---------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------ |
-| `headerHeight`         | `number`                                                   | ✅       | Fixed height of the header content (above the tab bar).                              |
-| `tabBarHeight`         | `number`                                                   | ✅       | Fixed height of the tab bar.                                                         |
-| `children`             | `TabReactElement \| TabReactElement[]`                     | ✅       | One or more `<Tab>` children.                                                        |
-| `initialTabName`       | `string`                                                   |          | Tab to focus on mount. Defaults to the first child.                                  |
-| `minHeaderHeight`      | `number`                                                   |          | Minimum visible header height once collapsed. Default `0`.                           |
-| `renderHeader`         | `(props: HeaderProps) => ReactElement \| null`             |          | Render function for the header content.                                              |
-| `renderTabBar`         | `(props: TabBarProps) => ReactElement \| null`             |          | Render function for a custom tab bar. Falls back to `<DefaultTabBar>` if not provided. |
-| `containerStyle`       | `StyleProp<ViewStyle>`                                     |          | Style for the outer container.                                                       |
-| `headerContainerStyle` | `StyleProp<ViewStyle>`                                     |          | Style for the absolutely-positioned header wrapper.                                  |
-| `pagerProps`           | `Omit<PagerViewProps, "onPageScroll" \| "initialPage">`    |          | Extra props forwarded to `PagerView`.                                                |
-| `onIndexChange`        | `(index: number) => void`                                  |          | Fired after the focused tab changes.                                                 |
+| Prop                   | Type                                                    | Required | Description                                                                            |
+| ---------------------- | ------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `headerHeight`         | `number`                                                | ✅       | Fixed height of the header content (above the tab bar).                                |
+| `tabBarHeight`         | `number`                                                | ✅       | Fixed height of the tab bar.                                                           |
+| `children`             | `TabReactElement \| TabReactElement[]`                  | ✅       | One or more `<Tab>` children.                                                          |
+| `initialTabName`       | `string`                                                |          | Tab to focus on mount. Defaults to the first child.                                    |
+| `minHeaderHeight`      | `number`                                                |          | Minimum visible header height once collapsed. Default `0`.                             |
+| `renderHeader`         | `(props: HeaderProps) => ReactElement \| null`          |          | Render function for the header content.                                                |
+| `renderTabBar`         | `(props: TabBarProps) => ReactElement \| null`          |          | Render function for a custom tab bar. Falls back to `<DefaultTabBar>` if not provided. |
+| `containerStyle`       | `StyleProp<ViewStyle>`                                  |          | Style for the outer container.                                                         |
+| `headerContainerStyle` | `StyleProp<ViewStyle>`                                  |          | Style for the absolutely-positioned header wrapper.                                    |
+| `pagerProps`           | `Omit<PagerViewProps, "onPageScroll" \| "initialPage">` |          | Extra props forwarded to `PagerView`.                                                  |
+| `onIndexChange`        | `(index: number) => void`                               |          | Fired after the focused tab changes.                                                   |
 
 ### `<Tab />`
 
 Wraps a single tab's content. Should be a direct child of `<CollapseTabs>`.
 
-| Prop       | Type              | Required | Description                                       |
-| ---------- | ----------------- | -------- | ------------------------------------------------- |
-| `name`     | `string`          | ✅       | Unique identifier — must match the inner list's `name`. |
+| Prop       | Type              | Required | Description                                                            |
+| ---------- | ----------------- | -------- | ---------------------------------------------------------------------- |
+| `name`     | `string`          | ✅       | Unique identifier — must match the inner list's `name`.                |
 | `label`    | `string`          |          | Optional display label (currently used by `DefaultTabBar` via `name`). |
-| `children` | `React.ReactNode` | ✅       | Tab content — usually a wrapped `<FlatList>` or `<ScrollView>`. |
+| `children` | `React.ReactNode` | ✅       | Tab content — usually a wrapped `<FlatList>` or `<ScrollView>`.        |
 
 ### `<FlatList />` and `<ScrollView />`
 
 Drop-in replacements for the standard components, pre-wired to the collapse-tabs scroll system.
 
-| Prop       | Type                                   | Required | Description                                                                 |
-| ---------- | -------------------------------------- | -------- | --------------------------------------------------------------------------- |
-| `name`     | `string`                               | ✅       | Must match the parent `<Tab name="..." />`.                                  |
+| Prop       | Type                                    | Required | Description                                                                         |
+| ---------- | --------------------------------------- | -------- | ----------------------------------------------------------------------------------- |
+| `name`     | `string`                                | ✅       | Must match the parent `<Tab name="..." />`.                                         |
 | `onScroll` | `(event) => void` or Reanimated worklet |          | Forwarded after the internal handler runs. Works with both JS and worklet handlers. |
-| ...        | —                                      |          | All other standard `FlatList` / `ScrollView` props.                          |
+| ...        | —                                       |          | All other standard `FlatList` / `ScrollView` props.                                 |
 
 > They automatically apply `paddingTop: headerHeight + tabBarHeight` to the content so your first item starts below the header.
 
@@ -204,11 +213,11 @@ const {
   tabBarHeight,
   headerScrollDistance,
   tabNames,
-  index,           // SharedValue<number>
-  indexDecimal,    // SharedValue<number>
-  focusedTab,      // SharedValue<string>
-  scrollY,         // SharedValue<Record<string, number>>
-  headerTranslateY,// SharedValue<number>
+  index, // SharedValue<number>
+  indexDecimal, // SharedValue<number>
+  focusedTab, // SharedValue<string>
+  scrollY, // SharedValue<Record<string, number>>
+  headerTranslateY, // SharedValue<number>
   containerRef,
 } = useTabsContext();
 ```
