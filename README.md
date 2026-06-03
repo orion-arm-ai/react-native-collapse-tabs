@@ -30,6 +30,32 @@
 
 ---
 
+## When to use
+
+Use `@orionarm/react-native-collapse-tabs` when you need a **Twitter / Instagram / YouTube profile style screen** in React Native — a large header that collapses as you scroll, sticky tabs underneath, swipeable pages, and per-tab scroll memory.
+
+Typical use cases:
+
+- **User / profile screens** with a hero header and `Posts / Likes / Media` tabs
+- **Product detail pages** with tabbed sections (Description / Reviews / Q&A)
+- **Restaurant / store pages** with collapsing cover image and category tabs
+- **Music / video apps** with an artist header and `Songs / Albums / Playlists` tabs
+- Any screen that needs a **collapsing header + sticky tab bar + horizontal swipe**
+
+## Comparison with similar libraries
+
+| Library                                       | Collapsible header | Swipeable tabs | Per-tab scroll | Reanimated v3 worklets | Bundle size |
+| --------------------------------------------- | ------------------ | -------------- | -------------- | ---------------------- | ----------- |
+| **@orionarm/react-native-collapse-tabs**      | ✅                 | ✅             | ✅             | ✅                     | ~30 KB      |
+| `react-native-collapsible-tab-view`           | ✅                 | ✅             | ✅             | ✅                     | larger      |
+| `react-native-scrollable-tab-view` _(legacy)_ | partial            | ✅             | ❌             | ❌                     | small       |
+| `react-native-tab-view`                       | ❌                 | ✅             | ❌             | partial                | medium      |
+| `react-native-sticky-parallax-header`         | ✅                 | ❌             | ❌             | partial                | medium      |
+
+Compared to `react-native-collapsible-tab-view`, this library aims for a **smaller API surface** and uses `react-native-pager-view` directly for native paging — fewer abstractions, easier to drop in, and easier to customize.
+
+---
+
 ## Requirements
 
 | Peer dependency                | Version    |
@@ -263,6 +289,48 @@ import type {
   TabName,
 } from "@orionarm/react-native-collapse-tabs";
 ```
+
+---
+
+## FAQ
+
+### How is this different from `react-native-collapsible-tab-view`?
+
+Both solve the same problem. `@orionarm/react-native-collapse-tabs` has a smaller surface area, uses `react-native-pager-view` directly (instead of `react-native-tab-view`), and exposes the underlying Reanimated `SharedValue`s through `useTabsContext()` so you can build fully custom headers/tab bars without forking.
+
+### Does it work with Expo?
+
+Yes. It works with **Expo SDK 49+** (any version that supports `react-native-reanimated` v3 and `react-native-pager-view` 6+). Run `npx expo install react-native-reanimated react-native-pager-view react-native-gesture-handler` and you're set.
+
+### Does it support iOS and Android?
+
+Yes — both platforms are first-class. All animations run on the UI thread via Reanimated worklets, so performance is identical on both.
+
+### Does it support pull-to-refresh?
+
+Yes. Pass `refreshControl` to the wrapped `<FlatList>` just like a normal RN list. The library handles overscroll so the header won't fly off-screen during the pull gesture.
+
+### Can I use a custom tab bar / animated header?
+
+Absolutely. Pass `renderTabBar` and `renderHeader` props, or read the shared scroll state via `useTabsContext()` to drive your own animations.
+
+### Does it support dynamic header height?
+
+Not yet — `headerHeight` is currently fixed. Dynamic height is on the [roadmap](#roadmap).
+
+### How do I keep each tab's scroll position independent?
+
+It's automatic. Just make sure the `name` prop on `<Tab>` matches the `name` prop on the inner `<FlatList>` / `<ScrollView>`.
+
+### Why Reanimated v3?
+
+Reanimated v3 worklets let scroll-driven animations run entirely on the UI thread, which is required for jank-free 60fps header collapse on lower-end Android devices.
+
+---
+
+## Keywords
+
+`react-native collapsible tabs` · `react-native sticky header tabs` · `react-native parallax header` · `react-native tab view with collapsing header` · `react-native scrollable tab bar` · `react-native pager view tabs` · `react-native animated tabs` · `react-native profile screen` · `instagram profile tabs react-native` · `twitter profile header react-native`
 
 ---
 
