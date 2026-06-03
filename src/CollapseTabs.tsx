@@ -80,7 +80,7 @@ export const CollapseTabs: React.FC<CollapseTabsProps> = ({
       const y = scrollY.value[tab] ?? 0;
       return {
         tab,
-        translateY: -Math.min(y, headerScrollDistance),
+        translateY: -Math.min(Math.max(y, 0), headerScrollDistance),
       };
     },
     (next, prev) => {

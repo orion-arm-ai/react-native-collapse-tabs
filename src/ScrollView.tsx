@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { ScrollViewProps, ScrollView as RNScrollView } from "react-native";
 import Animated, {
+  runOnJS,
   useAnimatedRef,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
@@ -12,6 +13,7 @@ export function ScrollView({
   name,
   contentContainerStyle,
   children,
+  onScroll: userOnScroll,
   ...rest
 }: Props) {
   const {
@@ -28,14 +30,25 @@ export function ScrollView({
     setRef(name, ref);
   }, [name, ref, setRef]);
 
-  const handler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      if (focusedTab.value !== name) return;
-      const map = { ...scrollY.value };
-      map[name] = event.contentOffset.y;
-      scrollY.value = map;
+  const handler = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        if (focusedTab.value === name) {
+          const map = { ...scrollY.value };
+          map[name] = event.contentOffset.y;
+          scrollY.value = map;
+        }
+        if (userOnScroll) {
+          if ((userOnScroll as any).worklet === true) {
+            (userOnScroll as any)(event);
+          } else {
+            runOnJS(userOnScroll as any)(event);
+          }
+        }
+      },
     },
-  });
+    [name, userOnScroll],
+  );
 
   return (
     <Animated.ScrollView
