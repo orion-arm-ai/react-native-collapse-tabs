@@ -1,7 +1,7 @@
 {
   "name": "@orionarm/react-native-collapse-tabs",
   "version": "1.0.5",
-  "description": "A React Native collapsible tabs component",
+  "description": "A high-performance React Native collapsible tabs component with sticky/animated header, swipeable pages, and per-tab scroll. Built on react-native-pager-view and react-native-reanimated v3.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -12,18 +12,34 @@
   },
   "keywords": [
     "react-native",
+    "react-native-tabs",
+    "react-native-collapsible-tabs",
+    "react-native-sticky-header",
+    "react-native-pager-view",
+    "react-native-reanimated",
     "collapse",
-    "tabs",
     "collapsible",
-    "react-native-component",
-    "react-component",
-    "react-native",
+    "tabs",
+    "tab",
+    "tab-view",
+    "tabbar",
+    "tab-bar",
+    "sticky-header",
+    "sticky",
+    "animated-header",
+    "parallax-header",
+    "scroll",
+    "scrollable",
+    "swipe",
+    "swipeable",
+    "pager",
+    "pager-view",
+    "reanimated",
     "ios",
     "android",
-    "tab",
-    "swipe",
-    "scrollable",
-    "coverflow"
+    "expo",
+    "flatlist",
+    "scrollview"
   ],
   "author": "yanan_orionarm",
   "license": "ISC",
@@ -35,6 +51,10 @@
     "url": "https://github.com/orion-arm-ai/react-native-collapse-tabs/issues"
   },
   "homepage": "https://github.com/orion-arm-ai/react-native-collapse-tabs#readme",
+  "engines": {
+    "node": ">=16"
+  },
+  "sideEffects": false,
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",

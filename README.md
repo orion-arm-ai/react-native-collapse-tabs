@@ -1,8 +1,18 @@
 # @orionarm/react-native-collapse-tabs
 
-> A lightweight, performant collapsible-tabs component for React Native, built on top of [`react-native-pager-view`](https://github.com/callstack/react-native-pager-view) and [`react-native-reanimated`](https://github.com/software-mansion/react-native-reanimated) v3.
+[![npm version](https://img.shields.io/npm/v/@orionarm/react-native-collapse-tabs.svg?style=flat-square)](https://www.npmjs.com/package/@orionarm/react-native-collapse-tabs)
+[![npm downloads](https://img.shields.io/npm/dm/@orionarm/react-native-collapse-tabs.svg?style=flat-square)](https://www.npmjs.com/package/@orionarm/react-native-collapse-tabs)
+[![license](https://img.shields.io/npm/l/@orionarm/react-native-collapse-tabs.svg?style=flat-square)](./LICENSE)
+[![platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-blue?style=flat-square)]()
+[![types](https://img.shields.io/npm/types/@orionarm/react-native-collapse-tabs.svg?style=flat-square)](https://www.npmjs.com/package/@orionarm/react-native-collapse-tabs)
 
-> ⚠️ **Work in Progress** — APIs may still change before `1.x` is considered stable.
+> A high-performance **React Native collapsible tabs** component with **sticky / animated header**, **swipeable pages**, and **per-tab scroll state**. Built on [`react-native-pager-view`](https://github.com/callstack/react-native-pager-view) and [`react-native-reanimated`](https://github.com/software-mansion/react-native-reanimated) v3.
+
+## Preview
+
+<p align="center">
+  <img src="https://assets.syft.ai/repository/collapse-tabs.gif" alt="collapse-tabs demo" width="320" />
+</p>
 
 ---
 
@@ -12,7 +22,9 @@
 - 🗂 **Swipeable tabs** — horizontal paging powered by `react-native-pager-view`.
 - 🎚 **Per-tab scroll state** — each tab keeps its own scroll position.
 - 🪄 **Animated tab switching** — header smoothly tweens between tabs (no sudden jumps).
+- 🛡 **Overscroll-safe** — pull-to-refresh / bounce area won't push the header off screen.
 - 🎨 **Custom header & tab bar** — bring your own UI, or use the built-in `DefaultTabBar`.
+- 🪝 **`onScroll` passthrough** — wrapped lists still forward your own scroll handler (worklet or JS).
 - ⚡ **Reanimated 3 worklets** — animations run on the UI thread for 60fps.
 - 🧩 **Drop-in scrollables** — wrapped `FlatList` / `ScrollView` handle the plumbing for you.
 
@@ -158,12 +170,25 @@ Wraps a single tab's content. Should be a direct child of `<CollapseTabs>`.
 
 Drop-in replacements for the standard components, pre-wired to the collapse-tabs scroll system.
 
-| Prop   | Type     | Required | Description                                            |
-| ------ | -------- | -------- | ------------------------------------------------------ |
-| `name` | `string` | ✅       | Must match the parent `<Tab name="..." />`.            |
-| ...    | —        |          | All other standard `FlatList` / `ScrollView` props.    |
+| Prop       | Type                                   | Required | Description                                                                 |
+| ---------- | -------------------------------------- | -------- | --------------------------------------------------------------------------- |
+| `name`     | `string`                               | ✅       | Must match the parent `<Tab name="..." />`.                                  |
+| `onScroll` | `(event) => void` or Reanimated worklet |          | Forwarded after the internal handler runs. Works with both JS and worklet handlers. |
+| ...        | —                                      |          | All other standard `FlatList` / `ScrollView` props.                          |
 
 > They automatically apply `paddingTop: headerHeight + tabBarHeight` to the content so your first item starts below the header.
+
+```tsx
+// Custom onScroll still works — gets called after the header math runs.
+<FlatList
+  name="Posts"
+  data={data}
+  renderItem={renderItem}
+  onScroll={(e) => {
+    console.log("user scroll y =", e.nativeEvent.contentOffset.y);
+  }}
+/>
+```
 
 ### `<DefaultTabBar />`
 
@@ -234,11 +259,10 @@ import type {
 
 ## Roadmap
 
-- [ ] Pull-to-refresh integration
 - [ ] Dynamic header height
 - [ ] SectionList / horizontal-list support
 - [ ] Snap-to-collapse behavior
-- [ ] Example app & screenshots
+- [ ] Example app
 
 ---
 
