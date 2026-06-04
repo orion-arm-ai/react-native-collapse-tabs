@@ -53,9 +53,7 @@ const Indicator: React.FC<{
   indexDecimal: Animated.SharedValue<number>;
 }> = ({ count, indexDecimal }) => {
   const style = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: (indexDecimal.value * 100) / count + "%" } as any,
-    ],
+    transform: [{ translateX: indexDecimal.value * 100 + "%" } as any],
     width: `${100 / count}%`,
   }));
   return <Animated.View style={[styles.indicator, style]} />;
@@ -63,6 +61,7 @@ const Indicator: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "#fff",
   },
