@@ -37,8 +37,11 @@ export type CollapseTabsProps = {
   /** Initial tab name. Defaults to the first child. */
   initialTabName?: TabName;
 
-  /** Fixed header height. Required for MVP. */
-  headerHeight: number;
+  /**
+   * Header height. If omitted, it will be measured automatically via onLayout.
+   * Pass it explicitly when you need an immediate value before the first layout pass.
+   */
+  headerHeight?: number;
 
   /** Fixed tab bar height. Required for MVP. */
   tabBarHeight: number;

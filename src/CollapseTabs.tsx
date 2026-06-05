@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import PagerView, {
   PagerViewOnPageScrollEventData,
   PagerViewOnPageSelectedEventData,
@@ -31,7 +31,7 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 export const CollapseTabs: React.FC<CollapseTabsProps> = ({
   children,
   initialTabName,
-  headerHeight,
+  headerHeight: headerHeightProp,
   tabBarHeight,
   minHeaderHeight = 0,
   renderHeader,
@@ -59,7 +59,21 @@ export const CollapseTabs: React.FC<CollapseTabsProps> = ({
     initialTabName ? tabNames.indexOf(initialTabName) : 0,
   );
 
-  const headerScrollDistance = headerHeight - minHeaderHeight;
+  const [measuredHeaderHeight, setMeasuredHeaderHeight] = useState(
+    headerHeightProp ?? 0,
+  );
+  const headerHeight = headerHeightProp ?? measuredHeaderHeight;
+
+  const onHeaderLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      if (headerHeightProp != null) return;
+      const h = e.nativeEvent.layout.height;
+      setMeasuredHeaderHeight((prev) => (prev === h ? prev : h));
+    },
+    [headerHeightProp],
+  );
+
+  const headerScrollDistance = Math.max(0, headerHeight - minHeaderHeight);
 
   const index = useSharedValue(initialIndex);
   const indexDecimal = useSharedValue(initialIndex);
@@ -187,12 +201,15 @@ export const CollapseTabs: React.FC<CollapseTabsProps> = ({
           pointerEvents="box-none"
           style={[
             styles.headerContainer,
-            { height: headerHeight + tabBarHeight },
             headerContainerStyle,
             headerAnimStyle,
           ]}
         >
-          <View pointerEvents="box-none" style={{ height: headerHeight }}>
+          <View
+            pointerEvents="box-none"
+            onLayout={onHeaderLayout}
+            style={headerHeightProp != null ? { height: headerHeightProp } : undefined}
+          >
             {renderHeader?.(headerProps)}
           </View>
           <View style={{ height: tabBarHeight }}>

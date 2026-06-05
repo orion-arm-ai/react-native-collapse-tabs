@@ -27,6 +27,7 @@
 - 🪝 **`onScroll` passthrough** — wrapped lists still forward your own scroll handler (worklet or JS).
 - ⚡ **Reanimated 3 worklets** — animations run on the UI thread for 60fps.
 - 🧩 **Drop-in scrollables** — wrapped `FlatList` / `ScrollView` handle the plumbing for you.
+- 📐 **Dynamic header height** — omit `headerHeight` and the header is auto-measured via `onLayout`.
 
 ---
 
@@ -179,7 +180,7 @@ The root container.
 
 | Prop                   | Type                                                    | Required | Description                                                                            |
 | ---------------------- | ------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `headerHeight`         | `number`                                                | ✅       | Fixed height of the header content (above the tab bar).                                |
+| `headerHeight`         | `number`                                                |          | Header height. If omitted, it's auto-measured via `onLayout`. Pass explicitly for a stable first paint. |
 | `tabBarHeight`         | `number`                                                | ✅       | Fixed height of the tab bar.                                                           |
 | `children`             | `TabReactElement \| TabReactElement[]`                  | ✅       | One or more `<Tab>` children.                                                          |
 | `initialTabName`       | `string`                                                |          | Tab to focus on mount. Defaults to the first child.                                    |
@@ -316,7 +317,16 @@ Absolutely. Pass `renderTabBar` and `renderHeader` props, or read the shared scr
 
 ### Does it support dynamic header height?
 
-Not yet — `headerHeight` is currently fixed. Dynamic height is on the [roadmap](#roadmap).
+Yes. `headerHeight` is optional — when omitted, the header is measured via `onLayout` and the layout updates automatically. Pass `headerHeight` explicitly when you need a stable first paint (otherwise list content briefly mounts with `paddingTop: tabBarHeight` before the first layout pass).
+
+```tsx
+<CollapseTabs
+  tabBarHeight={44}
+  renderHeader={() => <MyDynamicHeader />}
+>
+  {/* ... */}
+</CollapseTabs>
+```
 
 ### How do I keep each tab's scroll position independent?
 
@@ -336,7 +346,7 @@ Reanimated v3 worklets let scroll-driven animations run entirely on the UI threa
 
 ## Roadmap
 
-- [ ] Dynamic header height
+- [x] Dynamic header height
 - [ ] SectionList / horizontal-list support
 - [ ] Snap-to-collapse behavior
 - [ ] Example app
