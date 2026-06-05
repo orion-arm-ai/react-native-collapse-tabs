@@ -6,7 +6,7 @@
 [![platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-blue?style=flat-square)]()
 [![types](https://img.shields.io/npm/types/@orionarm/react-native-collapse-tabs.svg?style=flat-square)](https://www.npmjs.com/package/@orionarm/react-native-collapse-tabs)
 
-> A high-performance **React Native collapsible tabs** component with **sticky / animated header**, **swipeable pages**, and **per-tab scroll state**. Built on [`react-native-pager-view`](https://github.com/callstack/react-native-pager-view) and [`react-native-reanimated`](https://github.com/software-mansion/react-native-reanimated) v3.
+> A high-performance **React Native collapsible tabs** component with **sticky / animated header**, **swipeable pages**, and **per-tab scroll state**. Built on [`react-native-pager-view`](https://github.com/callstack/react-native-pager-view) and [`react-native-reanimated`](https://github.com/software-mansion/react-native-reanimated).
 
 ## Preview
 
