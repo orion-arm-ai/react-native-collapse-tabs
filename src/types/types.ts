@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, ScrollView, StyleProp, ViewStyle } from "react-native";
+import { FlatList, ScrollView, SectionList, StyleProp, ViewStyle } from "react-native";
 import PagerView, { PagerViewProps } from "react-native-pager-view";
 import Animated, { AnimatedRef, SharedValue } from "react-native-reanimated";
 
@@ -10,6 +10,7 @@ export type ContainerRef = PagerView;
 export type RefComponent =
   | FlatList<any>
   | ScrollView
+  | SectionList<any>
   | Animated.ScrollView;
 
 export type TabBarProps<T extends TabName = TabName> = {

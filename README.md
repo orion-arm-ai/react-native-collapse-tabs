@@ -26,7 +26,7 @@
 - 🎨 **Custom header & tab bar** — bring your own UI, or use the built-in `DefaultTabBar`.
 - 🪝 **`onScroll` passthrough** — wrapped lists still forward your own scroll handler (worklet or JS).
 - ⚡ **Reanimated 3 worklets** — animations run on the UI thread for 60fps.
-- 🧩 **Drop-in scrollables** — wrapped `FlatList` / `ScrollView` handle the plumbing for you.
+- 🧩 **Drop-in scrollables** — wrapped `FlatList` / `ScrollView` / `SectionList` handle the plumbing for you.
 - 📐 **Dynamic header height** — omit `headerHeight` and the header is auto-measured via `onLayout`.
 
 ---
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-> ⚠️ Important: the `name` prop of `<Tab>` and the `name` prop of the wrapped `<FlatList>` / `<ScrollView>` **must match** — that's how each tab's scroll position is tracked.
+> ⚠️ Important: the `name` prop of `<Tab>` and the `name` prop of the wrapped `<FlatList>` / `<ScrollView>` / `<SectionList>` **must match** — that's how each tab's scroll position is tracked.
 
 ---
 
@@ -178,31 +178,31 @@ const styles = StyleSheet.create({
 
 The root container.
 
-| Prop                   | Type                                                    | Required | Description                                                                            |
-| ---------------------- | ------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| Prop                   | Type                                                    | Required | Description                                                                                             |
+| ---------------------- | ------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `headerHeight`         | `number`                                                |          | Header height. If omitted, it's auto-measured via `onLayout`. Pass explicitly for a stable first paint. |
-| `tabBarHeight`         | `number`                                                | ✅       | Fixed height of the tab bar.                                                           |
-| `children`             | `TabReactElement \| TabReactElement[]`                  | ✅       | One or more `<Tab>` children.                                                          |
-| `initialTabName`       | `string`                                                |          | Tab to focus on mount. Defaults to the first child.                                    |
-| `minHeaderHeight`      | `number`                                                |          | Minimum visible header height once collapsed. Default `0`.                             |
-| `renderHeader`         | `(props: HeaderProps) => ReactElement \| null`          |          | Render function for the header content.                                                |
-| `renderTabBar`         | `(props: TabBarProps) => ReactElement \| null`          |          | Render function for a custom tab bar. Falls back to `<DefaultTabBar>` if not provided. |
-| `containerStyle`       | `StyleProp<ViewStyle>`                                  |          | Style for the outer container.                                                         |
-| `headerContainerStyle` | `StyleProp<ViewStyle>`                                  |          | Style for the absolutely-positioned header wrapper.                                    |
-| `pagerProps`           | `Omit<PagerViewProps, "onPageScroll" \| "initialPage">` |          | Extra props forwarded to `PagerView`.                                                  |
-| `onIndexChange`        | `(index: number) => void`                               |          | Fired after the focused tab changes.                                                   |
+| `tabBarHeight`         | `number`                                                | ✅       | Fixed height of the tab bar.                                                                            |
+| `children`             | `TabReactElement \| TabReactElement[]`                  | ✅       | One or more `<Tab>` children.                                                                           |
+| `initialTabName`       | `string`                                                |          | Tab to focus on mount. Defaults to the first child.                                                     |
+| `minHeaderHeight`      | `number`                                                |          | Minimum visible header height once collapsed. Default `0`.                                              |
+| `renderHeader`         | `(props: HeaderProps) => ReactElement \| null`          |          | Render function for the header content.                                                                 |
+| `renderTabBar`         | `(props: TabBarProps) => ReactElement \| null`          |          | Render function for a custom tab bar. Falls back to `<DefaultTabBar>` if not provided.                  |
+| `containerStyle`       | `StyleProp<ViewStyle>`                                  |          | Style for the outer container.                                                                          |
+| `headerContainerStyle` | `StyleProp<ViewStyle>`                                  |          | Style for the absolutely-positioned header wrapper.                                                     |
+| `pagerProps`           | `Omit<PagerViewProps, "onPageScroll" \| "initialPage">` |          | Extra props forwarded to `PagerView`.                                                                   |
+| `onIndexChange`        | `(index: number) => void`                               |          | Fired after the focused tab changes.                                                                    |
 
 ### `<Tab />`
 
 Wraps a single tab's content. Should be a direct child of `<CollapseTabs>`.
 
-| Prop       | Type              | Required | Description                                                            |
-| ---------- | ----------------- | -------- | ---------------------------------------------------------------------- |
-| `name`     | `string`          | ✅       | Unique identifier — must match the inner list's `name`.                |
-| `label`    | `string`          |          | Optional display label (currently used by `DefaultTabBar` via `name`). |
-| `children` | `React.ReactNode` | ✅       | Tab content — usually a wrapped `<FlatList>` or `<ScrollView>`.        |
+| Prop       | Type              | Required | Description                                                                       |
+| ---------- | ----------------- | -------- | --------------------------------------------------------------------------------- |
+| `name`     | `string`          | ✅       | Unique identifier — must match the inner list's `name`.                           |
+| `label`    | `string`          |          | Optional display label (currently used by `DefaultTabBar` via `name`).            |
+| `children` | `React.ReactNode` | ✅       | Tab content — usually a wrapped `<FlatList>`, `<ScrollView>`, or `<SectionList>`. |
 
-### `<FlatList />` and `<ScrollView />`
+### `<FlatList />`, `<ScrollView />` and `<SectionList />`
 
 Drop-in replacements for the standard components, pre-wired to the collapse-tabs scroll system.
 
@@ -210,7 +210,7 @@ Drop-in replacements for the standard components, pre-wired to the collapse-tabs
 | ---------- | --------------------------------------- | -------- | ----------------------------------------------------------------------------------- |
 | `name`     | `string`                                | ✅       | Must match the parent `<Tab name="..." />`.                                         |
 | `onScroll` | `(event) => void` or Reanimated worklet |          | Forwarded after the internal handler runs. Works with both JS and worklet handlers. |
-| ...        | —                                       |          | All other standard `FlatList` / `ScrollView` props.                                 |
+| ...        | —                                       |          | All other standard `FlatList` / `ScrollView` / `SectionList` props.                 |
 
 > They automatically apply `paddingTop: headerHeight + tabBarHeight` to the content so your first item starts below the header.
 
@@ -320,17 +320,18 @@ Absolutely. Pass `renderTabBar` and `renderHeader` props, or read the shared scr
 Yes. `headerHeight` is optional — when omitted, the header is measured via `onLayout` and the layout updates automatically. Pass `headerHeight` explicitly when you need a stable first paint (otherwise list content briefly mounts with `paddingTop: tabBarHeight` before the first layout pass).
 
 ```tsx
-<CollapseTabs
-  tabBarHeight={44}
-  renderHeader={() => <MyDynamicHeader />}
->
+<CollapseTabs tabBarHeight={44} renderHeader={() => <MyDynamicHeader />}>
   {/* ... */}
 </CollapseTabs>
 ```
 
 ### How do I keep each tab's scroll position independent?
 
-It's automatic. Just make sure the `name` prop on `<Tab>` matches the `name` prop on the inner `<FlatList>` / `<ScrollView>`.
+It's automatic. Just make sure the `name` prop on `<Tab>` matches the `name` prop on the inner `<FlatList>` / `<ScrollView>` / `<SectionList>`.
+
+### Does it support `SectionList`?
+
+Yes. Import the wrapped `SectionList` from the package and use it the same way as a normal RN `SectionList`:
 
 ### Why Reanimated v3?
 
@@ -347,7 +348,8 @@ Reanimated v3 worklets let scroll-driven animations run entirely on the UI threa
 ## Roadmap
 
 - [x] Dynamic header height
-- [ ] SectionList / horizontal-list support
+- [x] SectionList support
+- [ ] Horizontal-list support
 - [ ] Snap-to-collapse behavior
 - [ ] Example app
 
