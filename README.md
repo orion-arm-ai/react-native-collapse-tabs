@@ -331,7 +331,7 @@ It's automatic. Just make sure the `name` prop on `<Tab>` matches the `name` pro
 
 ### Does it support `SectionList`?
 
-Yes. Import the wrapped `SectionList` from the package and use it the same way as a normal RN `SectionList`:
+Yes. Import the wrapped `SectionList` from the package and use it the same way as a normal RN `SectionList`.
 
 ### Why Reanimated v3?
 
