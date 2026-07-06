@@ -59,6 +59,14 @@ export type CollapseTabsProps = {
   pagerProps?: Omit<PagerViewProps, "onPageScroll" | "initialPage">;
 
   onIndexChange?: (index: number) => void;
+
+  /**
+   * If true, the header reappears whenever the user scrolls up (regardless of
+   * current scroll position), and hides again when scrolling down.
+   * If false (default), the header only appears when the list is scrolled to the top.
+   * @default false
+   */
+  revealHeaderOnScrollUp?: boolean;
 };
 
 /** Internal context shared between CollapseTabs and its children. */

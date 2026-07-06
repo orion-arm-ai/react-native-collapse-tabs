@@ -40,6 +40,7 @@ export const CollapseTabs: React.FC<CollapseTabsProps> = ({
   headerContainerStyle,
   pagerProps,
   onIndexChange,
+  revealHeaderOnScrollUp = false,
 }) => {
   const tabs = useMemo(
     () =>
@@ -87,24 +88,40 @@ export const CollapseTabs: React.FC<CollapseTabsProps> = ({
   const scrollY = useSharedValue<Record<TabName, number>>(initialScrollY);
 
   const headerTranslateY = useSharedValue(0);
+  const prevScrollY = useSharedValue(0);
 
   useAnimatedReaction(
     () => {
       const tab = focusedTab.value;
       const y = scrollY.value[tab] ?? 0;
-      return {
-        tab,
-        translateY: -Math.min(Math.max(y, 0), headerScrollDistance),
-      };
+      return { tab, y };
     },
     (next, prev) => {
-      if (prev && prev.tab !== next.tab) {
-        headerTranslateY.value = withTiming(next.translateY, { duration: 250 });
+      const tabChanged = !!prev && prev.tab !== next.tab;
+      let translateY: number;
+
+      if (revealHeaderOnScrollUp) {
+        if (next.y <= headerScrollDistance) {
+          translateY = -Math.max(next.y, 0);
+        } else {
+          const prevY = tabChanged || !prev ? next.y : prevScrollY.value;
+          const delta = next.y - prevY;
+          const base = tabChanged ? -headerScrollDistance : headerTranslateY.value;
+          translateY = Math.min(0, Math.max(-headerScrollDistance, base - delta));
+        }
       } else {
-        headerTranslateY.value = next.translateY;
+        translateY = -Math.min(Math.max(next.y, 0), headerScrollDistance);
+      }
+
+      prevScrollY.value = next.y;
+
+      if (tabChanged) {
+        headerTranslateY.value = withTiming(translateY, { duration: 250 });
+      } else {
+        headerTranslateY.value = translateY;
       }
     },
-    [headerScrollDistance],
+    [headerScrollDistance, revealHeaderOnScrollUp],
   );
 
   const refMap = useRef<Record<TabName, AnimatedRef<RefComponent>>>({}).current;
